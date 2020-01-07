@@ -26,6 +26,7 @@ import Vue from "vue";
 import VueFriendlyIframe from "vue-friendly-iframe";
 import vueResource from "vue-resource";
 import { setInterval } from "timers";
+import moment from 'moment'
 
 // Vue.component("statichtmlpage", function (resolve, reject) {
 //     this.$http.get("./../components/index1.html", function (
@@ -62,7 +63,9 @@ export default {
       batt: new Array(),
       status_v: new Array(),
       Leng: {},
-      temp: {}
+      temp: {},
+      transi: new Array(),
+      todayDate: moment().format('DD/MM/YYYY')
       // }}
     };
   },
@@ -146,6 +149,7 @@ export default {
       batt: new Array();
       status_v: new Array();
       lati_trans: new Array();
+      transi: new Array();
 
       // this.map.Overlays.clear();
       // this.data_get = Promise.resolve(this.axiosTest())
@@ -161,9 +165,29 @@ export default {
           this.batt.push(value.data[l].battery);
           this.status_v.push(value.data[l].status);
           this.lati_trans.push(parseFloat(value.data[l].latitude_trans, 10));
+          this.transi.push(value.data[l].ts_trans);
+          // console.log(value.data[l].ts_trans)
+          // console.log(this.todayDate)
+
         }
         for (var p = 0; p < value.data.length; p++) {
-          if (this.status_v[p] == 9) {
+          if(this.transi[p] == null){
+            continue;
+          }
+          var ts_train_split = this.transi[p].split(" ");
+          var ts_train = moment(ts_train_split[0],'DD/MM/YYYY');
+          var todate = this.todayDate.split('/'); 
+          var today = moment(this.todayDate,'DD/MM/YYYY'); 
+          var diff_time = today.diff(ts_train,'days');
+          if (diff_time >= 10) {
+            this.createMarker(
+              p,
+              this.longitude[p],
+              this.latitude[p],
+              "http://maps.google.com/mapfiles/ms/micons/blue-dot.png"
+            );
+          }
+          else if (this.status_v[p] == 9) { 
             //if (trans[p] == 0) {
             this.createMarker(
               p,
@@ -172,7 +196,7 @@ export default {
               "http://maps.google.com/mapfiles/ms/micons/green-dot.png"
             );
           } else if (this.status_v[p] != null) {
-            if (this.fire_stat[p] > 0) {
+            if (this.fire_stat[p] > 0) { 
               if (this.fire_stat[p] == 1) {
                 this.createMarker(
                   p,

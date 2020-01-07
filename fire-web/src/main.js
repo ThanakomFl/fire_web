@@ -7,6 +7,8 @@ import vueResource from 'vue-resource'
 Vue.use(vueResource)
 
 import VueAxios from './plugins/axios'
+import moment from 'moment-timezone'
+moment.tz.setDefault('Asia/Bangkok')
 
 Vue.use(VueAxios)
 
