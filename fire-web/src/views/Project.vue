@@ -65,6 +65,7 @@ export default {
       Leng: {},
       temp: {},
       transi: new Array(),
+      online_v: new Array(),
       todayDate: moment().format('DD/MM/YYYY')
       // }}
     };
@@ -95,21 +96,21 @@ export default {
     createMarker: function(idx, long_v, lat_v, url_img_icon) {
       // console.log('test1')
       this.temp = this.latitude[idx];
-      this.tooltips_msg = "latitude : " + this.temp + " <br>";
+      this.tooltips_msg = "<b>latitude : </b>" + this.temp + " <br>";
       this.temp = this.longitude[idx];
       this.tooltips_msg =
-        this.tooltips_msg + "longitude : " + this.temp + " <br>";
+        this.tooltips_msg + "<b>longitude : </b>" + this.temp + " <br>";
       this.temp = this.detectors_number[idx];
       this.tooltips_msg =
-        this.tooltips_msg + "เลขอุปกรณ์ : " + this.temp + " <br>";
+        this.tooltips_msg + "<b>เลขอุปกรณ์ : </b>" + this.temp + " <br>";
       this.temp = this.fire_stat[idx] != 0 ? "พบควัน" : "ไม่พบควัน";
       this.tooltips_msg =
-        this.tooltips_msg + "สถานะควัน : " + this.temp + " <br>";
+        this.tooltips_msg + "<b>สถานะควัน : </b>" + this.temp + " <br>";
       this.temp = this.enable[idx] != 0 ? "ปกติ" : "ไม่พร้อมใช้";
-      this.tooltips_msg = this.tooltips_msg + "สถานะ : " + this.temp + " <br>";
+      this.tooltips_msg = this.tooltips_msg + "<b>สถานะ : </b>" + this.temp + " <br>";
       this.temp = this.batt[idx];
       this.tooltips_msg =
-        this.tooltips_msg + "ระดับแบตฯ : " + this.temp + " <br>";
+        this.tooltips_msg + "<b>ระดับแบตฯ : </b>" + this.temp + " <br>";
       // console.log(lat_v)
       // console.log(long_v)
 
@@ -150,6 +151,7 @@ export default {
       status_v: new Array();
       lati_trans: new Array();
       transi: new Array();
+      online_v: new Array();
 
       // this.map.Overlays.clear();
       // this.data_get = Promise.resolve(this.axiosTest())
@@ -166,26 +168,20 @@ export default {
           this.status_v.push(value.data[l].status);
           this.lati_trans.push(parseFloat(value.data[l].latitude_trans, 10));
           this.transi.push(value.data[l].ts_trans);
+          this.online_v.push(value.data[l].online);
           // console.log(value.data[l].ts_trans)
           // console.log(this.todayDate)
 
         }
         for (var p = 0; p < value.data.length; p++) {
-          if(this.transi[p] == null){
-            continue;
-          }
-          var ts_train_split = this.transi[p].split(" ");
-          var ts_train = moment(ts_train_split[0],'DD/MM/YYYY');
-          var todate = this.todayDate.split('/'); 
-          var today = moment(this.todayDate,'DD/MM/YYYY'); 
-          var diff_time = today.diff(ts_train,'days');
-          if (diff_time >= 10) {
+          if(!this.online_v[p] && (this.status_v[p] == 9 || this.status_v[p] == 0)){
             this.createMarker(
               p,
               this.longitude[p],
               this.latitude[p],
-              "http://maps.google.com/mapfiles/ms/micons/blue-dot.png"
-            );
+              // "http://maps.google.com/mapfiles/ms/micons/blue-dot.png"
+              require('@/img/gray-dot.png')
+            );        
           }
           else if (this.status_v[p] == 9) { 
             //if (trans[p] == 0) {
@@ -193,7 +189,8 @@ export default {
               p,
               this.longitude[p],
               this.latitude[p],
-              "http://maps.google.com/mapfiles/ms/micons/green-dot.png"
+              // "http://maps.google.com/mapfiles/ms/micons/green-dot.png"
+              require('@/img/green-dot.png')
             );
           } else if (this.status_v[p] != null) {
             if (this.fire_stat[p] > 0) { 
@@ -202,21 +199,24 @@ export default {
                   p,
                   this.longitude[p],
                   this.latitude[p],
-                  "http://maps.google.com/mapfiles/ms/micons/yellow-dot.png"
+                  // "http://maps.google.com/mapfiles/ms/micons/yellow-dot.png"
+                  require('@/img/yellow-dot.png')
                 );
               } else if (this.fire_stat[p] == 2) {
                 this.createMarker(
                   p,
                   this.longitude[p],
                   this.latitude[p],
-                  "http://maps.google.com/mapfiles/ms/micons/red-dot.png"
+                  // "http://maps.google.com/mapfiles/ms/micons/red-dot.png"
+                  require('@/img/red-dot.png')
                 );
               } else {
                 this.createMarker(
                   p,
                   this.longitude[p],
                   this.latitude[p],
-                  "http://maps.google.com/mapfiles/ms/micons/pink-dot.png"
+                  // "http://maps.google.com/mapfiles/ms/micons/pink-dot.png"
+                  require('@/img/pink-dot.png')
                 );
               }
             } else {
@@ -225,26 +225,29 @@ export default {
                   p,
                   this.longitude[p],
                   this.latitude[p],
-                  "http://maps.google.com/mapfiles/kml/pal3/icon51.png",
+                  // "http://maps.google.com/mapfiles/kml/pal3/icon51.png",
+                  require('@/img/icon51.png'),
                   "Test5"
                 );
               } else {
                 if (
-                  parseFloat(parseInt(this.latitude[p] * 1000) / 1000, 10) !=
-                  parseFloat(parseInt(this.lati_trans[p] * 1000) / 1000, 10)
+                  parseFloat(parseInt(this.latitude[p] * 100) / 100, 10) !=
+                  parseFloat(parseInt(this.lati_trans[p] * 100) / 100, 10)
                 ) {
                   this.createMarker(
                     p,
                     this.longitude[p],
                     this.latitude[p],
-                    "http://maps.google.com/mapfiles/ms/micons/bus.png"
+                    // "http://maps.google.com/mapfiles/ms/micons/bus.png"
+                    require('@/img/bus.png')
                   );
                 } else {
                   this.createMarker(
                     p,
                     this.longitude[p],
                     this.latitude[p],
-                    "http://maps.google.com/mapfiles/ms/micons/green-dot.png"
+                    // "http://maps.google.com/mapfiles/ms/micons/green-dot.png"
+                    require('@/img/green-dot.png')
                   );
                 }
               }
