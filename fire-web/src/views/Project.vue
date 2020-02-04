@@ -228,17 +228,7 @@ export default {
                   require('@/img/pink-dot.png')
                 );
               }
-            } else {
-                this.createMarker(
-                  p,
-                  this.longitude[p],
-                  this.latitude[p],
-                  // "http://maps.google.com/mapfiles/ms/micons/pink-dot.png"
-                  require('@/img/green-dot.png')
-                );
-            }
-          }else{
-            if(parseFloat(parseInt(this.latitude[p] * 100) / 100, 10) !=
+            } else if(parseFloat(parseInt(this.latitude[p] * 100) / 100, 10) !=
               parseFloat(parseInt(this.lati_trans[p] * 100) / 100, 10)) {
                   this.createMarker(
                     p,
@@ -247,6 +237,14 @@ export default {
                     // "http://maps.google.com/mapfiles/ms/micons/bus.png"
                     require('@/img/bus.png')
                   );
+            } else{
+                this.createMarker(
+                  p,
+                  this.longitude[p],
+                  this.latitude[p],
+                  // "http://maps.google.com/mapfiles/ms/micons/pink-dot.png"
+                  require('@/img/green-dot.png')
+                );
             }
           }
         }
