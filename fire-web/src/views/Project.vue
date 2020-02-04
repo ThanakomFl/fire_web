@@ -192,7 +192,16 @@ export default {
               // "http://maps.google.com/mapfiles/ms/micons/green-dot.png"
               require('@/img/green-dot.png')
             );
-          } else if (this.status_v[p] != null) {
+          }else if (this.enable[p] == 0) {
+                this.createMarker(
+                  p,
+                  this.longitude[p],
+                  this.latitude[p],
+                  // "http://maps.google.com/mapfiles/kml/pal3/icon51.png",
+                  require('@/img/icon51.png'),
+                  "Test5"
+                );
+          }else if (this.status_v[p] != null) {
             if (this.fire_stat[p] > 0) { 
               if (this.fire_stat[p] == 1) {
                 this.createMarker(
@@ -220,20 +229,17 @@ export default {
                 );
               }
             } else {
-              if (this.enable[p] == 0) {
                 this.createMarker(
                   p,
                   this.longitude[p],
                   this.latitude[p],
-                  // "http://maps.google.com/mapfiles/kml/pal3/icon51.png",
-                  require('@/img/icon51.png'),
-                  "Test5"
+                  // "http://maps.google.com/mapfiles/ms/micons/pink-dot.png"
+                  require('@/img/green-dot.png')
                 );
-              } else {
-                if (
-                  parseFloat(parseInt(this.latitude[p] * 100) / 100, 10) !=
-                  parseFloat(parseInt(this.lati_trans[p] * 100) / 100, 10)
-                ) {
+            }
+          }else{
+            if(parseFloat(parseInt(this.latitude[p] * 100) / 100, 10) !=
+              parseFloat(parseInt(this.lati_trans[p] * 100) / 100, 10)) {
                   this.createMarker(
                     p,
                     this.longitude[p],
@@ -241,16 +247,6 @@ export default {
                     // "http://maps.google.com/mapfiles/ms/micons/bus.png"
                     require('@/img/bus.png')
                   );
-                } else {
-                  this.createMarker(
-                    p,
-                    this.longitude[p],
-                    this.latitude[p],
-                    // "http://maps.google.com/mapfiles/ms/micons/green-dot.png"
-                    require('@/img/green-dot.png')
-                  );
-                }
-              }
             }
           }
         }
