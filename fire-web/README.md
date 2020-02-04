@@ -1,29 +1,20 @@
 # fire-web
 
+## First 
+```
+rm -rf node_modules/
+```
+
 ## Project setup
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
+### Compiles for production
 ```
 npm run build
 ```
-
-### Run your tests
+if you have a problem then restart with 
 ```
-npm run test
+service systemctl restart smoke-detector-web.service 
 ```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
