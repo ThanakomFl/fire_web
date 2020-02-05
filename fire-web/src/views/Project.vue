@@ -66,6 +66,9 @@ export default {
       temp: {},
       transi: new Array(),
       online_v: new Array(),
+      warning_sign: new Array(),
+      avg_smoke_v: new Array(),
+      setOffline: new Array(),
       todayDate: moment().format('DD/MM/YYYY')
       // }}
     };
@@ -108,6 +111,10 @@ export default {
         this.tooltips_msg + "<b>สถานะควัน : </b>" + this.temp + " <br>";
       this.temp = this.enable[idx] != 0 ? "ปกติ" : "ไม่พร้อมใช้";
       this.tooltips_msg = this.tooltips_msg + "<b>สถานะ : </b>" + this.temp + " <br>";
+      // this.temp = this.setOffline[idx] == 0 ? "ไม่ใช่" : "ใช่";
+      // this.tooltips_msg = this.tooltips_msg + "<b>Set Offline : </b>" + this.temp + "<br>";
+      // this.temp = this.avg_smoke_v[idx];
+      // this.tooltips_msg = tooltips_msg + "<b>Avg Smoke : </b>" + temp + " <br>";
       this.temp = this.batt[idx];
       this.tooltips_msg =
         this.tooltips_msg + "<b>ระดับแบตฯ : </b>" + this.temp + " <br>";
@@ -152,6 +159,9 @@ export default {
       lati_trans: new Array();
       transi: new Array();
       online_v: new Array();
+      warning_sign: new Array();
+      avg_smoke_v: new Array();
+      setOffline: new Array();
 
       // this.map.Overlays.clear();
       // this.data_get = Promise.resolve(this.axiosTest())
@@ -169,41 +179,31 @@ export default {
           this.lati_trans.push(parseFloat(value.data[l].latitude_trans, 10));
           this.transi.push(value.data[l].ts_trans);
           this.online_v.push(value.data[l].online);
-          // console.log(value.data[l].ts_trans)
-          // console.log(this.todayDate)
+          this.warning_sign.push(value.data[l].warningDetectorSign);
+          this.avg_smoke_v.push(value.data[l].avg_smv);
+          this.setOffline.push(value.data[l].setOffline);
 
         }
         for (var p = 0; p < value.data.length; p++) {
-          if(!this.online_v[p] && (this.status_v[p] == 9 || this.status_v[p] == 0)){
+          if(this.warning_sign[p] || this.setOffline[p]){
             this.createMarker(
               p,
               this.longitude[p],
               this.latitude[p],
               // "http://maps.google.com/mapfiles/ms/micons/blue-dot.png"
               require('@/img/gray-dot.png')
-            );        
-          }
-          else if (this.status_v[p] == 9) { 
-            //if (trans[p] == 0) {
+            );    
+          }else if(!this.online_v[p] && (this.status_v[p] == 9 || this.status_v[p] == 0)){
             this.createMarker(
               p,
               this.longitude[p],
               this.latitude[p],
-              // "http://maps.google.com/mapfiles/ms/micons/green-dot.png"
-              require('@/img/green-dot.png')
-            );
-          }else if (this.enable[p] == 0) {
-                this.createMarker(
-                  p,
-                  this.longitude[p],
-                  this.latitude[p],
-                  // "http://maps.google.com/mapfiles/kml/pal3/icon51.png",
-                  require('@/img/icon51.png'),
-                  "Test5"
-                );
-          }else if (this.status_v[p] != null) {
-            if (this.fire_stat[p] > 0) { 
-              if (this.fire_stat[p] == 1) {
+              // "http://maps.google.com/mapfiles/ms/micons/blue-dot.png"
+              require('@/img/gray-dot.png')
+            );    
+          }else if(this.status_v[p] != null){
+            if(this.fire_stat[p] > 0){
+              if(this.fire_stat[p] == 1){
                 this.createMarker(
                   p,
                   this.longitude[p],
@@ -211,7 +211,7 @@ export default {
                   // "http://maps.google.com/mapfiles/ms/micons/yellow-dot.png"
                   require('@/img/yellow-dot.png')
                 );
-              } else if (this.fire_stat[p] == 2) {
+              }else if(this.fire_stat[p] == 2 ){
                 this.createMarker(
                   p,
                   this.longitude[p],
@@ -219,7 +219,7 @@ export default {
                   // "http://maps.google.com/mapfiles/ms/micons/red-dot.png"
                   require('@/img/red-dot.png')
                 );
-              } else {
+              }else{
                 this.createMarker(
                   p,
                   this.longitude[p],
@@ -228,23 +228,22 @@ export default {
                   require('@/img/pink-dot.png')
                 );
               }
-            } else if(parseFloat(parseInt(this.latitude[p] * 100) / 100, 10) !=
-              parseFloat(parseInt(this.lati_trans[p] * 100) / 100, 10)) {
-                  this.createMarker(
-                    p,
-                    this.longitude[p],
-                    this.latitude[p],
-                    // "http://maps.google.com/mapfiles/ms/micons/bus.png"
-                    require('@/img/bus.png')
-                  );
-            } else{
-                this.createMarker(
-                  p,
-                  this.longitude[p],
-                  this.latitude[p],
-                  // "http://maps.google.com/mapfiles/ms/micons/pink-dot.png"
-                  require('@/img/green-dot.png')
-                );
+            }else if(parseFloat(parseInt(this.latitude[p] * 100) / 100, 10) != parseFloat(parseInt(this.lati_trans[p] * 100) / 100, 10)){
+              this.createMarker(
+                p,
+                this.longitude[p],
+                this.latitude[p],
+                // "http://maps.google.com/mapfiles/ms/micons/bus.png"
+                require('@/img/bus.png')
+              );
+            }else{
+              this.createMarker(
+                p,
+                this.longitude[p],
+                this.latitude[p],
+                // "http://maps.google.com/mapfiles/ms/micons/pink-dot.png"
+                require('@/img/green-dot.png')
+              );
             }
           }
         }
