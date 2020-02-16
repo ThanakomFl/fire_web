@@ -38,6 +38,11 @@
                 <br />16. พรวิชชา​ สมทรัพย์
                 <br />17. วรรณรัตน์ บุญยัง
                 <br />18. ณัชพล เพทายเทียมทอง
+                <br />19. กฤษณพงศ์ ใจกล้า
+                <br />20. สรณ์พนัส ศรีประดิษฐ์   
+                <br />21. ปกรณ์ แสงงาม
+                <br />22. ฐิติมากานต์ สอนสุภาพ
+                <br />23. ศตนันท์ ธุระกิจ
                 <br />
             </span>
         </v-flex>
@@ -68,6 +73,7 @@
                 <br />3. พรวิชชา​ สมทรัพย์
                 <br />4. รัชชานนท์ สมทา
                 <br />5. นันทวัฒน์ วิเศษทรัพย์
+                <br />6. ธนาคม หัสแดง
             </span>
         </v-flex>
     </v-layout>
@@ -81,6 +87,7 @@
     <v-divider></v-divider>
     <h2 class="black--text text-xs-left font-weight-bold">Sponsored by</h2>
     <v-layout row justify-center>
+        <v-img contain aspect-ratio="1" :src="require('@/img/gear_logo.jpg')" class="ma-1 team"></v-img>
         <v-img contain aspect-ratio="1" :src="require('@/img/CILab_logo.png')" class="ma-1 team"></v-img>
         <v-img contain aspect-ratio="1" :src="require('@/img/AIS-logo-1.png')" class="ma-1 team"></v-img>
         <v-img contain aspect-ratio="1" :src="require('@/img/Chiang_Mai_University_Logo.png')" class="ma-1 team"></v-img>

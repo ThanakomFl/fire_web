@@ -58,7 +58,6 @@ export default {
       lati_trans: new Array(),
 
       longitude: new Array(),
-      enable: new Array(),
       detectors_number: new Array(),
       batt: new Array(),
       status_v: new Array(),
@@ -69,6 +68,7 @@ export default {
       warning_sign: new Array(),
       avg_smoke_v: new Array(),
       setOffline: new Array(),
+      available: new Array(),
       todayDate: moment().format('DD/MM/YYYY')
       // }}
     };
@@ -109,7 +109,7 @@ export default {
       this.temp = this.fire_stat[idx] != 0 ? "พบควัน" : "ไม่พบควัน";
       this.tooltips_msg =
         this.tooltips_msg + "<b>สถานะควัน : </b>" + this.temp + " <br>";
-      this.temp = this.enable[idx] != 0 ? "ปกติ" : "ไม่พร้อมใช้";
+      this.temp = this.available[idx] != 0 ? "ปกติ" : "ไม่พร้อมใช้";
       this.tooltips_msg = this.tooltips_msg + "<b>สถานะ : </b>" + this.temp + " <br>";
       // this.temp = this.setOffline[idx] == 0 ? "ไม่ใช่" : "ใช่";
       // this.tooltips_msg = this.tooltips_msg + "<b>Set Offline : </b>" + this.temp + "<br>";
@@ -152,7 +152,6 @@ export default {
       fire_stat: new Array();
       latitude: new Array();
       longitude: new Array();
-      enable: new Array();
       detectors_number: new Array();
       batt: new Array();
       status_v: new Array();
@@ -162,14 +161,13 @@ export default {
       warning_sign: new Array();
       avg_smoke_v: new Array();
       setOffline: new Array();
+      available: new Array();
 
       // this.map.Overlays.clear();
       // this.data_get = Promise.resolve(this.axiosTest())
       this.data_get.then(value => {
         console.log(value);
-        this.map.Overlays.clear();
         for (var l = 0; l < value.data.length; l++) {
-          this.enable.push(value.data[l].available_status);
           this.fire_stat.push(value.data[l].fire_status);
           this.latitude.push(value.data[l].latitude);
           this.longitude.push(value.data[l].longitude);
@@ -182,8 +180,9 @@ export default {
           this.warning_sign.push(value.data[l].warningDetectorSign);
           this.avg_smoke_v.push(value.data[l].avg_smv);
           this.setOffline.push(value.data[l].setOffline);
-
+          this.available.push(value.data[l].available_status);
         }
+        this.map.Overlays.clear();
         for (var p = 0; p < value.data.length; p++) {
           if(this.warning_sign[p] || this.setOffline[p]){
             this.createMarker(
@@ -235,6 +234,13 @@ export default {
                 this.latitude[p],
                 // "http://maps.google.com/mapfiles/ms/micons/bus.png"
                 require('@/img/bus.png')
+              );
+            }else if(this.available[p]==0){
+              this.createMarker(
+                p,
+                this.longitude[p],
+                this.latitude[p],
+                require('@/img/icon51.png')
               );
             }else{
               this.createMarker(
