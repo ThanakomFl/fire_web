@@ -267,7 +267,7 @@ export default {
     setInterval(() => {
       // this.init();
       this.data_get = Promise.resolve(this.axiosTest());
-      this.map.Overlays.clear();
+      // this.map.Overlays.clear();
       this.myTimer();
       console.log("New interval");
     }, 10000);
